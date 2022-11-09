@@ -49,7 +49,7 @@ def find_pivot(self):
     for i in range(self.dimension[1]):                              # For each column
         is_unbounded = False
         pivot_column = i                                            # Pivot column index
-        pivot_line = 0                                              # Pivot row index
+        pivot_row = 0                                              # Pivot row index
         if(self.c[i] < 0):                                          # Negative input in c found
             c_aux = copy.deepcopy(self.c)
             c_aux = np.delete(c_aux, [i])
@@ -64,18 +64,44 @@ def find_pivot(self):
                         candidate_value = self.b[j] / self.A[j][i]  # The minimum value is the new pivot
                         if(candidate_value < min_value and candidate_value >= 0 and self.A[j][i] > 0):
                             min_value = candidate_value             # The current minimum value
-                            pivot_line = j                          # The current pivot row index
+                            pivot_row = j                          # The current pivot row index
                 break                                               # New pivot is found
-    return pivot_column, pivot_line, is_unbounded
+    return pivot_column, pivot_row, is_unbounded
 
 
-# After computing simplex algorithm, find the solution x
+# Find the solution for the basic variables
 def find_solution(self):
     solution = np.zeros(self.dimension[1] - self.dimension[0])      # The solution size is the original number of variables
     for i in range(len(self.b)):
         if(self.base_columns[i] < self.dimension[1] - self.dimension[0]):
             solution[self.base_columns[i]] = self.b[i]
     return solution                                                 # Vector with the optimal values for the basic variables
+
+
+# Simplex algorithm
+def simplex(constraints, result_constraints, objective_function, base_indexes):
+    tableau = Tableau()                                             # Create a tableau with the received data
+    tableau.A = copy.deepcopy(constraints)
+    tableau.b = copy.deepcopy(result_constraints)
+    tableau.c = objective_function * (-1)
+    tableau.base_columns = copy.deepcopy(base_indexes)
+    tableau.dimension = (constraints.shape[0], constraints.shape[1])
+    canonical_form(tableau)
+    while(np.any(tableau.c < 0)):                                   # Vector c has negative values
+        pivot_column, pivot_row, is_unbounded = find_pivot(tableau) # Find the element to be the new pivot
+        if(is_unbounded):                                           # The LP is unbounded
+            tableau.identification = 'ilimitada'
+            solution = find_solution(tableau)                       # Find a not optimal solution (does not exist)
+            return tableau.optimal_solution, solution, tableau.identification, tableau.base_columns
+        tableau.base_columns[pivot_row] = pivot_column              # Update the base columns
+        canonical_form(tableau)                                     # Update the tableau for canonical form again
+    solution = find_solution(tableau)                               # Find the optimal solution
+    if(tableau.optimal_solution < 0):                               # When optimal solution is negative, the LP is inviable
+        tableau.identification = 'inviavel'
+    else:                                                           # This LP has an optimal solution
+        tableau.identification = 'otima'
+    return tableau.optimal_solution, solution, tableau.identification, tableau.base_columns
+
 
 
 
