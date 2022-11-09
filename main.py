@@ -13,6 +13,13 @@ class Tableau:
         self.identification = ''        # Optimal, unbounded or impossible
 
 
+# Set very low values to zero
+def rounding_to_zero(value):
+    if (abs(value) < 1e-4):
+        value = 0.0
+    return value
+
+
 # Converting an LP into canonical form
 def canonical_form(self):
     # Make all the basic variables pivots values equal to 1 and the other variables 0 (includind c inputs)
@@ -29,7 +36,7 @@ def canonical_form(self):
         aux = self.c[self.base_columns[i]]                   # c input must also be null
         self.c -= aux * self.A[i,:]                          # Substract all the vector c
         self.optimal_solution -= aux * self.b[i]             # Substract the optimal value with respect to vector b
-    vfunc = np.vectorize(round_zero)                         # Applies the function in parameter in all the vector's input
+    vfunc = np.vectorize(rounding_to_zero)                         # Applies the function in parameter in all the vector's input
     self.A = vfunc(self.A)                                   # (set very low values to zero)
     self.b = vfunc(self.b)
     self.c = vfunc(self.c)
