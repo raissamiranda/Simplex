@@ -69,10 +69,19 @@ def find_pivot(self):
     return pivot_column, pivot_line, is_unbounded
 
 
+# After computing simplex algorithm, find the solution x
+def find_solution(self):
+    solution = np.zeros(self.dimension[1] - self.dimension[0])      # The solution size is the original number of variables
+    for i in range(len(self.b)):
+        if(self.base_columns[i] < self.dimension[1] - self.dimension[0]):
+            solution[self.base_columns[i]] = self.b[i]
+    return solution                                                 # Vector with the optimal values for the basic variables
+
+
 
 
 # Tests
-c = [1,2,3,4]
+c = [-1,2,-3,4]
 A = [[2,5,3,4],
      [3,2,4,9],
      [4,3,2,5]]
@@ -86,9 +95,10 @@ teste.base_columns = [1,2,3]
 teste.dimension = (3,4)
 
 canonical_form(teste)
+print('A = ')
 print(teste.A)
-print(teste.b)
-print(teste.c)
-
+print('b = ', teste.b)
+print('c = ', teste.c)
+print(find_pivot(teste))
 
 
