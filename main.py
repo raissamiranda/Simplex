@@ -105,26 +105,46 @@ def simplex(constraints, result_constraints, objective_function, base_indexes):
 
 
 
+# Receiving data
+N, M = input().split()                                               # The input format is specified in READ_ME
+N = int(N)                                                           # Constraints number
+M = int(M)                                                           # Variables number
+
+input_c = input.split()
+c_optimal_input = np.array(input_c, dtype = float)
+
+constraints_input = []
+for i in range(N):
+    constraints_input.append(input().split())
+constraints_input = np.array(constraints_input, dtype = float)
+
+fpi_variables = np.eye(N, dtype = float)                            # An identity matrix of size N (a new variable for each inequal constraint)
+
+base_input = np.array(constraints_input[:,-1])
+
+
+
+
 
 # Tests
-c = [-1,2,-3,4]
-A = [[2,5,3,4],
-     [3,2,4,9],
-     [4,3,2,5]]
-b = [10,15,20,25]
+c = [2,4,8]
+A = [[1,0,0],
+     [0,1,0],
+     [0,0,1]]
+b = [1,1,1]
 
 teste = Tableau()
 teste.c = np.array(c, dtype = float)
 teste.A = np.array(A, dtype = float)
 teste.b = np.array(b, dtype = float)
-teste.base_columns = [1,2,3]
-teste.dimension = (3,4)
+teste.base_columns = [0,1,2]
+teste.dimension = (3,3)
 
 canonical_form(teste)
 print('A = ')
 print(teste.A)
 print('b = ', teste.b)
 print('c = ', teste.c)
-print(find_pivot(teste))
+print(simplex(teste.A, teste.b, teste.c, teste.base_columns))
 
 
