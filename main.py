@@ -126,6 +126,13 @@ def auxiliar_pl(inicial_A, inicial_b):
     return aux_A, aux_b, aux_c, aux_base_indexes
 
 
+# For printing the array solution
+def printArray(a):
+    for i in range(len(a)):
+        print('{:.7f}'.format(a[i]), end=' ')
+    print()
+
+
 #----------------------------------------------------- Execution ------------------------------------------------------------
 # Receiving data
 N, M = input().split()                                               # The input format is specified in READ_ME
