@@ -64,7 +64,7 @@ def find_pivot(self):
             c_aux = copy.deepcopy(self.c)
             c_aux = np.delete(c_aux, [i])
             # Checking unbounded PL
-            if(np.all(self.A[:, i] <= 0) and (np.all(c_aux >= 0) or i < self.dimensions[1] - self.dimensions[0])):
+            if(np.all(self.A[:, i] <= 0) and (np.all(c_aux >= 0) or i < self.dimension[1] - self.dimension[0])):
                 is_unbounded = True
                 break                                               # Computing optimal value is impossible
             if(self.c[i] < 0):
