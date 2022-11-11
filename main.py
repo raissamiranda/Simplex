@@ -113,8 +113,20 @@ def simplex(constraints, result_constraints, objective_function, base_indexes):
     return tableau.optimal_solution, solution, tableau.identification, tableau.base_columns
 
 
+# When there is no base in original pl, find them using an auxiliar pl
+def auxiliar_pl(inicial_A, inicial_b):
+    aux_A = copy.deepcopy(inicial_A)
+    aux_b = copy.deepcopy(inicial_b)
+    # Concatenate an identity matrix to the original one
+    aux_A = np.concatenate((aux_A, np.eye(inicial_A.shape[0], dtype = float)), axis = 1)
+    # The auxiliar c vector has 0 in original inputs and -1 in new inputs
+    aux_c = np.concatenate((np.zeros(inicial_A.shape[1]), np.full(inicial_A.shape[0], -1)))
+    # The base indexes for auxiliar pl
+    aux_base_indexes = list(range(inicial_A.shape[1], inicial_A.shape[0] + inicial_A.shape[1]))
+    return aux_A, aux_b, aux_c, aux_base_indexes
 
 
+#----------------------------------------------------- Execution ------------------------------------------------------------
 # Receiving data
 N, M = input().split()                                               # The input format is specified in READ_ME
 N = int(N)                                                           # Constraints number
