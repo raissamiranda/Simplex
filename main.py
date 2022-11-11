@@ -127,7 +127,7 @@ def auxiliar_pl(inicial_A, inicial_b):
 
 
 # For printing the array solution
-def printArray(a):
+def print_array(a):
     for i in range(len(a)):
         print('{:.7f}'.format(a[i]), end=' ')
     print()
@@ -168,33 +168,27 @@ if(np.any(b_input < 0)):
             b_input[i] *= (-1)                                       # Multiply the b negative row by (-1)
             constraints_input[i][:] *= (-1)
 
+# Create an solve auxiliar pl for the original problem
+aux_A, aux_b, aux_c, aux_base_indexes = auxiliar_pl(constraints_input, b_input)
+aux_optimal_value, aux_solution, aux_identification, aux_base_indexes = simplex(aux_A, aux_b, aux_c, aux_base_indexes) 
 
-
-
-
-
-
-'''
-# Tests
-c = [2,4,8]
-A = [[1,0,0],
-     [0,1,0],
-     [0,0,1]]
-b = [1,1,1]
-
-teste = Tableau()
-teste.c = np.array(c, dtype = float)
-teste.A = np.array(A, dtype = float)
-teste.b = np.array(b, dtype = float)
-teste.base_columns = [0,1,2]
-teste.dimension = (3,3)
-
-canonical_form(teste)
-print('A = ')
-print(teste.A)
-print('b = ', teste.b)
-print('c = ', teste.c)'''
-
-print(simplex(constraints_input, b_input, c_optimal_input, base_input))
-
-
+if(aux_optimal_value < 0):                                           # When auxiliar PL has a negative optimal value, the original problem is impossible
+    print(aux_identification)
+else:
+    if(negative_b):                                                  # When the original problem has negative b values, there is no original base
+        aux_base_indexes.sort()                                      # because the row is multiplied by (-1), so use the auxiliar pl to find them
+        aux_base_indexes = aux_base_indexes[:N + M]
+        for i in range(len(aux_base_indexes)):
+            if(aux_base_indexes[i] > M + N):                         # If the basic variable is an auxiliar variable in auxiliar pl
+                aux_base_indexes[i] = aux_base_indexes[i] - (M + N)
+        base_input = aux_base_indexes
+    last_optimal_value, last_solution, last_identification, last_base_columns = simplex(constraints_input, b_input, c_optimal_input, base_input)
+    v_func = np.vectorize(rounding_to_zero)
+    solution = v_func(last_solution)
+    optimal_value = v_func(last_optimal_value)
+    print(last_identification)
+    if(last_identification = 'ilimitada'):
+        print_array(last_solution)
+    if(last_identification = 'otima'):
+        print('{:.7f}'.format(last_optimal_value))
+        print_array(last_solution)
