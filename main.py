@@ -187,8 +187,8 @@ else:
     solution = v_func(last_solution)
     optimal_value = v_func(last_optimal_value)
     print(last_identification)
-    if(last_identification = 'ilimitada'):
+    if(last_identification == 'ilimitada'):
         print_array(last_solution)
-    if(last_identification = 'otima'):
+    if(last_identification == 'otima'):
         print('{:.7f}'.format(last_optimal_value))
         print_array(last_solution)
