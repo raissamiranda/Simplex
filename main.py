@@ -161,6 +161,7 @@ constraints_input = np.concatenate((np.array(constraints_input[:,:-1]), fpi_vari
 c_optimal_input = np.concatenate((np.array(input_c, dtype = float), np.zeros(N)))
 
 # Check on negative values in b vector
+negative_b = False
 if(np.any(b_input < 0)):
     negative_b = True
     for i in range(N):
