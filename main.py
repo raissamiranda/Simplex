@@ -14,6 +14,16 @@ class Tableau:
         self.identification = ''        # Optimal, unbounded or impossible
 
 
+# For testing
+def print_tableau(self):
+    print('A = ')
+    print(self.A)
+    print('b = ', self.b)
+    print('c = ', self.c)
+    print('optimal solution = ', self.optimal_solution)
+    print('base columns = ', self.base_columns)
+
+
 # Set very low values to zero
 def rounding_to_zero(value):
     if (abs(value) < 1e-4):
@@ -49,7 +59,7 @@ def find_pivot(self):
     for i in range(self.dimension[1]):                              # For each column
         is_unbounded = False
         pivot_column = i                                            # Pivot column index
-        pivot_row = 0                                              # Pivot row index
+        pivot_row = 0                                               # Pivot row index
         if(self.c[i] < 0):                                          # Negative input in c found
             c_aux = copy.deepcopy(self.c)
             c_aux = np.delete(c_aux, [i])
@@ -64,7 +74,7 @@ def find_pivot(self):
                         candidate_value = self.b[j] / self.A[j][i]  # The minimum value is the new pivot
                         if(candidate_value < min_value and candidate_value >= 0 and self.A[j][i] > 0):
                             min_value = candidate_value             # The current minimum value
-                            pivot_row = j                          # The current pivot row index
+                            pivot_row = j                           # The current pivot row index
                 break                                               # New pivot is found
     return pivot_column, pivot_row, is_unbounded
 
@@ -110,7 +120,7 @@ N, M = input().split()                                               # The input
 N = int(N)                                                           # Constraints number
 M = int(M)                                                           # Variables number
 
-input_c = input.split()
+input_c = input().split()
 c_optimal_input = np.array(input_c, dtype = float)
 
 constraints_input = []
@@ -120,12 +130,23 @@ constraints_input = np.array(constraints_input, dtype = float)
 
 fpi_variables = np.eye(N, dtype = float)                            # An identity matrix of size N (a new variable for each inequal constraint)
 
-base_input = np.array(constraints_input[:,-1])
+b_input = np.array(constraints_input[:,-1])
+
+if(np.array_equal(constraints_input[:, (N - 1):-1], fpi_variables)): # The LP already has a base
+    base_input = list(range(M - N, M))                               # The basic variables are the fpi ones
+else:                                                                # No base was formed with the fpi format
+    base_input = list(range(M, M + N))                               # The bases are the compensating variables
+
+# Add the fpi variables for making LP fpi form
+constraints_input = np.concatenate((np.array(constraints_input[:,:-1]), fpi_variables), axis = 1)
+c_optimal_input = np.concatenate((np.array(input_c, dtype = float), np.zeros(N)))
 
 
 
 
 
+
+'''
 # Tests
 c = [2,4,8]
 A = [[1,0,0],
@@ -144,7 +165,8 @@ canonical_form(teste)
 print('A = ')
 print(teste.A)
 print('b = ', teste.b)
-print('c = ', teste.c)
-print(simplex(teste.A, teste.b, teste.c, teste.base_columns))
+print('c = ', teste.c)'''
+
+print(simplex(constraints_input, b_input, c_optimal_input, ))
 
 
