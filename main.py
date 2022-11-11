@@ -120,17 +120,17 @@ N, M = input().split()                                               # The input
 N = int(N)                                                           # Constraints number
 M = int(M)                                                           # Variables number
 
-input_c = input().split()
+input_c = input().split()                                            # Objective function input
 c_optimal_input = np.array(input_c, dtype = float)
 
 constraints_input = []
-for i in range(N):
+for i in range(N):                                                   # Constraints input
     constraints_input.append(input().split())
 constraints_input = np.array(constraints_input, dtype = float)
 
-fpi_variables = np.eye(N, dtype = float)                            # An identity matrix of size N (a new variable for each inequal constraint)
+fpi_variables = np.eye(N, dtype = float)                             # An identity matrix of size N (a new variable for each inequal constraint)
 
-b_input = np.array(constraints_input[:,-1])
+b_input = np.array(constraints_input[:,-1])                          # Constraints results input
 
 if(np.array_equal(constraints_input[:, (N - 1):-1], fpi_variables)): # The LP already has a base
     base_input = list(range(M - N, M))                               # The basic variables are the fpi ones
@@ -140,6 +140,15 @@ else:                                                                # No base w
 # Add the fpi variables for making LP fpi form
 constraints_input = np.concatenate((np.array(constraints_input[:,:-1]), fpi_variables), axis = 1)
 c_optimal_input = np.concatenate((np.array(input_c, dtype = float), np.zeros(N)))
+
+# Check on negative values in b vector
+if(np.any(b_input < 0)):
+    negative_b = True
+    for i in range(N):
+        if(b_input[i] < 0):
+            b_input[i] *= (-1)                                       # Multiply the b negative row by (-1)
+            constraints_input[i][:] *= (-1)
+
 
 
 
@@ -167,6 +176,6 @@ print(teste.A)
 print('b = ', teste.b)
 print('c = ', teste.c)'''
 
-print(simplex(constraints_input, b_input, c_optimal_input, ))
+print(simplex(constraints_input, b_input, c_optimal_input, base_input))
 
 
