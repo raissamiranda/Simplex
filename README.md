@@ -13,10 +13,11 @@ This project solves linear problems in canonical form:
 
 $$
 A = \left[
-\begin{array}{ccc}
-1 & xyz & a_{13} \\
-25 & 0 & \cos{x} \\
-0 & a_{32} & \Box
+\begin{array}{cccc}
+a_{1,1} & a_{1,2} & ... & a_{1,m} \\
+a_{2,1} & a_{2,2} & ... & a_{2,m} \\
+... & ... & ... & ... \\
+a_{n,1} & a_{n,2} & ... & a_{n,m} \Box
 \end{array}
 \right]
 $$
