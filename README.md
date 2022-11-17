@@ -55,7 +55,7 @@ The values, including, b can be negative.
 
 There is an example for a generic input below:
 
-$n m$
+$n$  $m$
 
 $c_{1} c_{2} ... c_{m} $
 
@@ -93,22 +93,33 @@ $\forall i; 1 \le i \le m; |c_{i}| \le 100$
 
 ### Input 1:
 3 3
+
 2 4 8
+
 1 0 0 1
+
 0 1 0 1
+
 0 0 1 1
 
 ### Output 1:
 otima
+
 14
+
 2 4 8
 
 ### Input 2:
 4 3
+
 1 1 1
+
 1 0 0 -1
+
 0 1 0 -1
+
 0 0 1 -1
+
 1 1 1 -1
 
 ### Output 2:
@@ -116,25 +127,35 @@ inviavel
 
 ### Input 3:
 2 3
+
 1 0 0
+
 -1 1 0 5
+
 -1 0 1 7
 
 ### Output 3:
 ilimitada
+
 0 5 7
 
 ### Input 4:
 4 4
 -3 -4 5 -5
+
 1 1 0 0 5
+
 -1 0 -5 5 -10
+
 2 1 1 -1 10
+
 -2 -1 -1 1 -10
 
 ### Outuput 4:
 otima
+
 50
+
 0 0 5 0
 
 
