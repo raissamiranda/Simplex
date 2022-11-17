@@ -55,25 +55,25 @@ The values, including, b can be negative.
 
 There is an example for a generic input below:
 
-n m
+$n m$
 
-c_{1} c_{2} ... c_{m} 
+$c_{1} c_{2} ... c_{m} $
 
-a_{1,1} a_{1,2} ... a_{1,m} b_{1}
+$a_{1,1} a_{1,2} ... a_{1,m} b_{1}$
 
-a_{2,1} a_{2,2} ... a_{2,m} b_{2}
+$a_{2,1} a_{2,2} ... a_{2,m} b_{2}$
 
-...     ...     ...     ...     ...
+$...     ...     ...     ...     ...
 
-a_{n,1} a_{n,2} ... a_{n,m} b_{n}
+$a_{n,1} a_{n,2} ... a_{n,m} b_{n}$
 
 with:
 
-$1 \le n \le 100
-1 \le m \le 100
-\forall i; 1 \le i \le n; \forall j; 1 \le j \le m; |a_{i,j}| j \le 100
-\forall i; 1 \le i \le m; |b_{i}| \le 100
-\forall i; 1 \le i \le m; |c_{i}| \le 100$
+$1 \le n \le 100$
+$1 \le m \le 100$
+$\forall i; 1 \le i \le n; \forall j; 1 \le j \le m; |a_{i,j}| j \le 100$
+$\forall i; 1 \le i \le m; |b_{i}| \le 100$
+$\forall i; 1 \le i \le m; |c_{i}| \le 100$
 
 
 
