@@ -6,12 +6,17 @@ Simplex algorithm is used to solve the Linear Programming (LP) optimization prob
 
 This project solves linear problems in canonical form:
 > max $c^Tx$
-> $subject to Ax \le b$
+> 
+> subject to $Ax \le b$
 
 
 
-$left( begin{array}{rrr}
-1 & 0 & 0 \
-0 & 1 & 0 \
-0 & 0 & 1 \
-end{array}right)$
+$$
+A = \left[
+\begin{array}{ccc}
+1 & xyz & a_{13} \\
+25 & 0 & \cos{x} \\
+0 & a_{32} & \Box
+\end{array}
+\right]
+$$
