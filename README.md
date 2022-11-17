@@ -9,7 +9,7 @@ This project solves linear problems in canonical form:
 > 
 > subject to $Ax \le b$
 
-
+with $c$ the coefficients of the objective function, $A$ and $b$ represents the constraints with a $m x n$ matrix and an array.
 
 $$
 A = \left[
@@ -17,7 +17,31 @@ A = \left[
 a_{1,1} & a_{1,2} & ... & a_{1,m} \\
 a_{2,1} & a_{2,2} & ... & a_{2,m} \\
 ... & ... & ... & ... \\
-a_{n,1} & a_{n,2} & ... & a_{n,m} \Box
+a_{n,1} & a_{n,2} & ... & a_{n,m} \\
 \end{array}
 \right]
 $$
+
+$$
+b = \left[
+\begin{array}{c}
+b_{1} \\
+b_{2} \\
+... \\
+b_{n} \\
+\end{array}
+\right]
+$$
+
+$$
+c = \left[
+\begin{array}{c}
+c_{1} \\
+c_{2} \\
+... \\
+c_{m} \\
+\end{array}
+\right]
+$$
+
+## Input
