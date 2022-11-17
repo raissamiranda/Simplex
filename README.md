@@ -4,10 +4,13 @@ Simplex algorithm is used to solve the Linear Programming (LP) optimization prob
 
 ## Description
 
-The simplex algorithm operates on linear programs in the [[canonical form]]
+This project solves linear problems in canonical form:
+max $c^Tx$
 
-:maximize <math display="inline">\mathbf{c^T} \mathbf{x}</math>
-:subject to <math>A\mathbf{x} \leq \mathbf{b}</math> and <math>\mathbf{x} \ge 0</math>
 
-with <math>\mathbf{c} = (c_1,\, \dots,\, c_n)</math> the coefficients of the objective function, <math>(\cdot)^\mathrm{T}</math> is the [[matrix transpose]], and <math> \mathbf{x} = (x_1,\, \dots,\, x_n)</math> are the variables of the problem, <math>A</math> is a ''p''×''n'' matrix, and <math> \mathbf{b} = (b_1,\, \dots,\, b_p)</math>.
 
+$left( begin{array}{rrr}
+1 & 0 & 0 \
+0 & 1 & 0 \
+0 & 0 & 1 \
+end{array}right)$
