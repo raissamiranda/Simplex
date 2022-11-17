@@ -5,7 +5,8 @@ Simplex algorithm is used to solve the Linear Programming (LP) optimization prob
 ## Description
 
 This project solves linear problems in canonical form:
-max $c^Tx$
+> max $c^Tx$
+> $subject to Ax \le b$
 
 
 
