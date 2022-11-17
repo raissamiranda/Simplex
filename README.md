@@ -45,3 +45,7 @@ c_{m} \\
 $$
 
 ## Input
+The first line of the input contains two integers n and m, respectively the number of constraints and variables.
+The second line contains m integers, that represents vector $c$.
+Each of the next n lines contains m + 1 integers that represents the constraints. The first m lines are the A matrix and the last column in b vector.
+The values, including, b can be negative.
