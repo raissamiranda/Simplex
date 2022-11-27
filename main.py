@@ -12,6 +12,8 @@ class Tableau:
         self.base_columns = []          # Bases index
         self.dimension = (0,0)          # A's dimension
         self.identification = ''        # Optimal, unbounded or impossible
+        self.certificate = []           # Identification certificate
+        self.vero = []                  # Auxiliar matrix for finding certificate
 
 
 # For testing
@@ -39,19 +41,24 @@ def canonical_form(self):
             aux = copy.deepcopy(self.A[i][self.base_columns[i]])     # Value that annuls the variable when divided
             self.A[i,:] /= aux                                       # Make pivot value equals to 1
             self.b[i] /= aux                                         # Vector b is also divided
+            self.vero[i,:] /= aux
         for j in range(self.dimension[0]):                           # For each line
             if (i != j):                                             # It's not the basic variable line
                 aux = copy.deepcopy(self.A[j][self.base_columns[i]]) # Value that should be null
                 self.A[j,:] -= aux * self.A[i,:]                     # Subtract all the line
                 self.b[j] -= aux * self.b[i]                         # Vector b is also subtracted
+                self.vero[j,:] -= aux * self.vero[i, :]
         aux = self.c[self.base_columns[i]]                           # c input must also be null
         self.c -= aux * self.A[i,:]                                  # Substract all the vector c
         self.optimal_solution -= aux * self.b[i]                     # Substract the optimal value with respect to vector b
+        self.certificate -= aux * self.vero[i,:]
     vfunc = np.vectorize(rounding_to_zero)                           # Applies the function in parameter in all the vector's input
     self.A = vfunc(self.A)                                           # (set very low values to zero)
     self.b = vfunc(self.b)
     self.c = vfunc(self.c)
     self.optimal_solution = vfunc(self.optimal_solution)
+    self.certificate = vfunc(self.certificate)
+    self.vero = vfunc(self.vero)
 
 
 # Following Bland's rule, find the pivot element in the correct column and line and check if it's an unbounded LP
@@ -89,20 +96,22 @@ def find_solution(self):
 
 
 # Simplex algorithm
-def simplex(constraints, result_constraints, objective_function, base_indexes):
+def simplex(constraints, result_constraints, objective_function, base_indexes, vero):
     tableau = Tableau()                                             # Create a tableau with the received data
     tableau.A = copy.deepcopy(constraints)
     tableau.b = copy.deepcopy(result_constraints)
     tableau.c = objective_function * (-1)
     tableau.base_columns = copy.deepcopy(base_indexes)
     tableau.dimension = (constraints.shape[0], constraints.shape[1])
+    tableau.certificate = np.zeros(tableau.dimension[0])
+    tableau.vero = vero.copy()
     canonical_form(tableau)
     while(np.any(tableau.c < 0)):                                   # Vector c has negative values
         pivot_column, pivot_row, is_unbounded = find_pivot(tableau) # Find the element to be the new pivot
         if(is_unbounded):                                           # The LP is unbounded
             tableau.identification = 'ilimitada'
             solution = find_solution(tableau)                       # Find a not optimal solution (does not exist)
-            return tableau.optimal_solution, solution, tableau.identification, tableau.base_columns
+            return tableau.certificate, tableau.optimal_solution, solution, tableau.identification, tableau.base_columns
         tableau.base_columns[pivot_row] = pivot_column              # Update the base columns
         canonical_form(tableau)                                     # Update the tableau for canonical form again
     solution = find_solution(tableau)                               # Find the optimal solution
@@ -110,7 +119,7 @@ def simplex(constraints, result_constraints, objective_function, base_indexes):
         tableau.identification = 'inviavel'
     else:                                                           # This LP has an optimal solution
         tableau.identification = 'otima'
-    return tableau.optimal_solution, solution, tableau.identification, tableau.base_columns
+    return tableau.certificate, tableau.optimal_solution, solution, tableau.identification, tableau.base_columns
 
 
 # When there is no base in original pl, find them using an auxiliar pl
@@ -149,6 +158,8 @@ constraints_input = np.array(constraints_input, dtype = float)
 
 fpi_variables = np.eye(N, dtype = float)                             # An identity matrix of size N (a new variable for each inequal constraint)
 
+vero_matrix = np.eye(N, dtype = float)
+
 b_input = np.array(constraints_input[:,-1])                          # Constraints results input
 
 if(np.array_equal(constraints_input[:, (N - 1):-1], fpi_variables)): # The LP already has a base
@@ -168,13 +179,15 @@ if(np.any(b_input < 0)):
         if(b_input[i] < 0):
             b_input[i] *= (-1)                                       # Multiply the b negative row by (-1)
             constraints_input[i][:] *= (-1)
+            vero_matrix[i][:] *= -1
 
 # Create an solve auxiliar pl for the original problem
 aux_A, aux_b, aux_c, aux_base_indexes = auxiliar_pl(constraints_input, b_input)
-aux_optimal_value, aux_solution, aux_identification, aux_base_indexes = simplex(aux_A, aux_b, aux_c, aux_base_indexes) 
+aux_certificate, aux_optimal_value, aux_solution, aux_identification, aux_base_indexes = simplex(aux_A, aux_b, aux_c, aux_base_indexes, vero_matrix.copy()) 
 
 if(aux_optimal_value < 0):                                           # When auxiliar PL has a negative optimal value, the original problem is impossible
     print(aux_identification)
+    print(aux_certificate)
 else:
     if(negative_b):                                                  # When the original problem has negative b values, there is no original base
         aux_base_indexes.sort()                                      # because the row is multiplied by (-1), so use the auxiliar pl to find them
@@ -183,7 +196,7 @@ else:
             if(aux_base_indexes[i] > M + N):                         # If the basic variable is an auxiliar variable in auxiliar pl
                 aux_base_indexes[i] = aux_base_indexes[i] - (M + N)
         base_input = aux_base_indexes
-    last_optimal_value, last_solution, last_identification, last_base_columns = simplex(constraints_input, b_input, c_optimal_input, base_input)
+    last_certificate, last_optimal_value, last_solution, last_identification, last_base_columns = simplex(constraints_input, b_input, c_optimal_input, base_input, vero_matrix)
     v_func = np.vectorize(rounding_to_zero)
     solution = v_func(last_solution)
     optimal_value = v_func(last_optimal_value)
@@ -193,3 +206,4 @@ else:
     if(last_identification == 'otima'):
         print('{:.7f}'.format(last_optimal_value))
         print_array(last_solution)
+        print_array(last_certificate)
