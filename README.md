@@ -146,7 +146,7 @@ ilimitada
 -2 -1 -1 1 -10
 ```
 
-### Outuput 4:
+### Output 4:
 ```
 otima
 50
