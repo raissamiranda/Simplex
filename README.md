@@ -54,7 +54,7 @@ Each of the next n lines contains m + 1 integers that represents the constraints
 The values, including, b can be negative.
 
 There is an example for a generic input below:
-```
+
 $n$  $m$
 
 $c_{1} c_{2} ... c_{m} $
@@ -66,7 +66,7 @@ $a_{2,1} a_{2,2} ... a_{2,m} b_{2}$
 $...     ...     ...     ...     ...$
 
 $a_{n,1} a_{n,2} ... a_{n,m} b_{n}$
-```
+
 
 with:
 
