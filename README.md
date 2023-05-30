@@ -1,6 +1,6 @@
 # Simplex
 
-Simplex algorithm is used to solve the Linear Programming (LP) optimization problems.
+Simplex algorithm is used to solve the Linear Programming (LP) optimization problems. 
 
 ## Description
 
